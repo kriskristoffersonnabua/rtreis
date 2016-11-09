@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+
+<ScrollPane xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EmploymentHistory">
+   <content>
+      <TableView fx:id="employment_table" prefHeight="-1.0" prefWidth="-1.0" stylesheets="@../resources/main.css">
+         <columns>
+            <TableColumn fx:id="contractStartColumn" prefWidth="150.0" style="" text="Start Of Contract" />
+            <TableColumn fx:id="contractEndColumn" prefWidth="150.0" text="End Of Contract" />
+            <TableColumn fx:id="departmentColumn" prefWidth="100.0" text="Department" />
+            <TableColumn fx:id="employmentStatusColumn" prefWidth="149.0" text="Status Of Employment" />
+            <TableColumn fx:id="positionColumn" prefWidth="76.0" text="Position" />
+            <TableColumn fx:id="activeColumn" prefWidth="75.0" text="Active" />
+         </columns>
+      </TableView>
+   </content>
+</ScrollPane>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AddClockingScheduleController">
+   <children>
+      <VBox alignment="CENTER" layoutX="53.0" layoutY="34.0" spacing="10.0" style="-fx-border-width: 1; -fx-border-color: lightblue;" stylesheets="@../resources/main.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label depthTest="DISABLE" text="CLOCKING SCHEDULE" VBox.vgrow="ALWAYS" />
+            <GridPane prefHeight="134.0" prefWidth="266.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <TextField fx:id="clockdefinition" maxHeight="16.0" minHeight="16.0" GridPane.columnIndex="1" />
+                  <TextField fx:id="timein" maxHeight="16.0" maxWidth="80.0" minHeight="16.0" minWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="timeout" maxHeight="16.0" maxWidth="80.0" minHeight="16.0" minWidth="80.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label text="Clock Definition" />
+                  <Label text="In" GridPane.rowIndex="1" />
+                  <Label text="Out" GridPane.rowIndex="2" />
+                  <CheckBox fx:id="isNightDiff" mnemonicParsing="false" text="Is This Night Differential" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+               </children>
+            </GridPane>
+            <HBox alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#addOrSaveEdit" text="Add" />
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="379.0" maxWidth="342.0" minHeight="379.0" minWidth="342.0" prefHeight="379.0" prefWidth="342.0" stylesheets="@../resources/main.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DepartmentController">
+   <children>
+      <ScrollPane stylesheets="@../resources/main.css" VBox.vgrow="ALWAYS">
+         <content>
+            <TableView fx:id="departmentListTable" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="342.0" prefWidth="340.0">
+               <columnResizePolicy>
+               </columnResizePolicy>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <columns>
+                  <TableColumn fx:id="departmentNameColumn" prefWidth="329.0" text="DEPARTMENT" />
+               </columns>
+            </TableView>
+         </content>
+      </ScrollPane>
+      <HBox alignment="TOP_RIGHT" spacing="5.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Button mnemonicParsing="false" onAction="#addDepartment" text="+" />
+            <Button mnemonicParsing="false" onAction="#deleteDepartment" prefWidth="25.0" text="-" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </HBox>
+   </children>
+</VBox>

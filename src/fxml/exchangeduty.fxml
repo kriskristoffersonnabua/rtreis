@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10.0" stylesheets="@../resources/main.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ExchangeDutyController">
+   <children>
+      <HBox spacing="5.0">
+         <children>
+            <Label text="Employee:" />
+            <ComboBox fx:id="combobox" maxHeight="16.0" minHeight="16.0" prefHeight="18.0" prefWidth="150.0" />
+            <Label text="Schedule:" />
+            <ComboBox fx:id="schedule" disable="true" maxHeight="16.0" minHeight="16.0" prefHeight="16.0" prefWidth="83.0" />
+         </children>
+      </HBox>
+      <HBox spacing="5.0">
+         <children>
+            <Label fx:id="employee2label" text="Employee:" visible="false" />
+            <ComboBox fx:id="combobox2" maxHeight="16.0" minHeight="16.0" prefHeight="18.0" prefWidth="150.0" visible="false" />
+            <Label fx:id="schedule2label" text="Schedule:" visible="false" />
+            <ComboBox fx:id="schedule2" maxHeight="16.0" minHeight="16.0" prefHeight="16.0" prefWidth="83.0" visible="false" />
+         </children>
+      </HBox>
+      <HBox prefHeight="0.0" prefWidth="349.0">
+         <children>
+            <Label fx:id="label" text="Original Date: " />
+            <DatePicker fx:id="originalschedule" prefHeight="18.0" prefWidth="276.0" />
+         </children>
+      </HBox>
+      <HBox prefHeight="0.0" prefWidth="349.0">
+         <children>
+            <Label fx:id="label2" prefHeight="14.0" prefWidth="96.0" text="New Date: " />
+            <DatePicker fx:id="newschedule" prefHeight="18.0" prefWidth="301.0" />
+         </children>
+      </HBox>
+      <HBox spacing="5.0">
+         <children>
+            <VBox spacing="5.0">
+               <children>
+                  <CheckBox fx:id="offduty" mnemonicParsing="false" onAction="#offduty" selected="true" text="Exchange off duty" />
+                  <CheckBox fx:id="ofduty" mnemonicParsing="false" onAction="#ofduty" text="Exchange of duty" />
+               </children>
+            </VBox>
+            <Button fx:id="okay" alignment="BASELINE_CENTER" mnemonicParsing="false" onAction="#update" prefHeight="41.0" prefWidth="201.0" text="Exchange" />
+         </children>
+      </HBox>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</VBox>
