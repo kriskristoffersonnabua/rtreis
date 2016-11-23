@@ -136,8 +136,8 @@
                 </VBox>
                 <HBox id="HBox" alignment="CENTER_RIGHT" spacing="5.0">
                   <children>
-                    <Button mnemonicParsing="false" onAction="#showAddEmploymentGUI" text="+" />
-                    <Button mnemonicParsing="false" onAction="#removeEmploymentRecord" prefWidth="24.0" text="-" />
+                    <Button mnemonicParsing="false" onAction="#showAddEmploymentGUI" text="Add" />
+                    <Button mnemonicParsing="false" onAction="#removeEmploymentRecord" prefHeight="22.0" prefWidth="60.0" text="Delete" />
                   </children>
                 </HBox>
               </children>
@@ -255,20 +255,16 @@
                     </VBox>
                     <VBox id="VBox" alignment="CENTER" spacing="5.0">
                       <children>
-                        <ScrollPane prefHeight="100.0" prefWidth="200.0">
-                          <content>
-                            <TableView fx:id="dependentsTable" prefHeight="-1.0" prefWidth="-1.0">
-                              <columns>
-                                <TableColumn fx:id="dependentColumnOne" prefWidth="120.0" text="Name" />
-                                <TableColumn fx:id="dependentColumnTwo" minWidth="0.0" prefWidth="127.0" text="Birthday" />
-                              </columns>
-                            </TableView>
-                          </content>
-                        </ScrollPane>
+                      <TableView fx:id="dependentsTable" prefHeight="145.0" prefWidth="231.0">
+                        <columns>
+                          <TableColumn fx:id="dependentColumnOne" prefWidth="120.0" text="Name" />
+                          <TableColumn fx:id="dependentColumnTwo" minWidth="0.0" prefWidth="127.0" text="Birthday" />
+                        </columns>
+                      </TableView>
                         <HBox id="HBox" alignment="CENTER_RIGHT" spacing="5.0">
                           <children>
-                            <Button mnemonicParsing="false" onAction="#showAddChildren" text="+" />
-                            <Button mnemonicParsing="false" prefWidth="24.0" text="-" />
+                            <Button mnemonicParsing="false" onAction="#showAddChildren" text="Add" />
+                            <Button mnemonicParsing="false" onAction="#deleteChild" prefHeight="22.0" prefWidth="59.0" text="Delete" />
                           </children>
                         </HBox>
                       </children>

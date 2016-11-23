@@ -115,6 +115,14 @@ public class MainController implements Initializable{
     private File fileToRead;
     private FileInputStream fis;
     
+    @FXML public TableView dependentsTable;
+    
+    public void deleteChild() {
+        Child child;
+        child = (Child) dependentsTable.getSelectionModel().getSelectedItem();
+        System.out.println(child.getName());
+    }
+    
     public void foo () {
         int choice = JOptionPane.showConfirmDialog(null, "You are about to delete this employee. Are you sure?");
         if(choice==JOptionPane.OK_OPTION){

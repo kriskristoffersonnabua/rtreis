@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -21,6 +22,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
@@ -132,12 +135,20 @@ public class UpdateEmployeeController implements Initializable {
     
     Stage stage;
     private Stage addDependent_stage;
-    private Stage addEmployment_stage;
+    public Stage addEmployment_stage;
     private Stage editEmployment_stage;
     
     @FXML public TextField imagepath;
     String image_path;
     private File file;
+    
+    public void deleteChild () {
+        Child child;
+        child = (Child) dependentsTable.getSelectionModel().getSelectedItem();
+        dependents.remove(child);
+        System.out.println(child.getName());
+        System.out.println("fuck");
+    }
     
      public void setPhoto () throws Exception {
 //        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -149,8 +160,32 @@ public class UpdateEmployeeController implements Initializable {
             System.out.println("this is the extenson of the image: "
                     +file.getName().substring(file.getName().length()-4, file.getName().length()));
         }
-    }
+    }   
     
+    public void editEmployment () {
+        addEmployment_stage = new Stage();
+        addEmployment_stage.setTitle("Edit Employment Record");
+        EmploymentStatus es = (EmploymentStatus) employment_table.getSelectionModel().getSelectedItem();
+        AddEmploymentController ad = AddEmploymentController.getInstance();
+        if(es.getDepartment()!=null)
+        ad.department_combobox.getSelectionModel().select(es.getDepartment());
+        if(es.getStart_of_employment()!=null)
+        ad.employment_start.setValue(es.getStart_of_employment().toLocalDate());
+        if(es.getEnd_of_employment()!=null)
+        ad.employment_end.setValue(es.getEnd_of_employment().toLocalDate());
+        if(es.getPosition()!=null)
+        ad.position.setText(es.getPosition());
+        if(es.getStatus_of_employment()!=null)
+        ad.employment_status.setText(es.getStatus_of_employment());
+        ad.isActive.setSelected(es.isIsActive());
+        ad.updatebutton.setText("Save");
+        ad.toUpdate = es;
+        
+        AddEmploymentController.getInstance().toUpdate = es;
+        addEmployment_stage.setScene(CoreController.getInstance().add_employment);
+        addEmployment_stage.show();
+    }
+     
     public void resetAll () {
         spouseName.clear();
         dependents.clear();
@@ -199,6 +234,17 @@ public class UpdateEmployeeController implements Initializable {
         
         civilStatus.getItems().clear();
         civilStatus.getItems().addAll("Single", "Married", "Widowed", "It's Complicated");
+        
+        employment_table.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                if (e.getButton().equals(MouseButton.PRIMARY)) {
+                    if (e.getClickCount() == 2) {
+                        editEmployment();
+                    }
+                }
+            }
+        });
     }
     
     public void save () {
@@ -225,7 +271,9 @@ public class UpdateEmployeeController implements Initializable {
         e.setPermanentaddress(permanentaddress.getText());
         e.setCurrentaddress(currentaddress.getText());
         
+        e.getEmployment_records().clear();
         e.getEmployment_records().addAll(employmentRecordData);
+        
         for (Iterator<EmploymentStatus> iterator = employmentRecordData.iterator(); iterator.hasNext();) {
             EmploymentStatus next = iterator.next();
             System.out.println("Records");
@@ -235,6 +283,7 @@ public class UpdateEmployeeController implements Initializable {
         CivilStatus cs = new CivilStatus();
         cs.setCivil_status(civilStatus.getSelectionModel().getSelectedItem());
         cs.setSpouse_name(spouseName.getText());
+        cs.getChildren().clear();
         cs.getChildren().addAll(dependents);
         e.setCivilstatus(cs);
 
@@ -570,6 +619,7 @@ public class UpdateEmployeeController implements Initializable {
         addEmployment_stage = new Stage();
         addEmployment_stage.setTitle("Add Employment Record");
         addEmployment_stage.setScene(CoreController.getInstance().add_employment);
+        AddEmploymentController.getInstance().updatebutton.setText("Add");
         addEmployment_stage.show();
     }
     
