@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,6 +82,7 @@ public class Writer implements Initializable{
         long date;
         boolean isRegularHoliday;
         boolean isSpecialHoliday;
+	boolean isBothRegularHolidaySpecialHoliday;
         long rh;
         long sh;
         long overtime;
@@ -266,7 +268,7 @@ public class Writer implements Initializable{
            table.addCell(new PdfPCell(new Paragraph("Short",text)));
            table.addCell(new PdfPCell(new Paragraph("Overtime",text)));
            table.addCell(new PdfPCell(new Paragraph("Remarks",text)));
-           Collection records = employee.getAttendance_record();
+           List records = (List) employee.getAttendance_record();
            LocalDate s = startDate.getValue();
            LocalDate e = endDate.getValue();
            Calendar startingDate = new GregorianCalendar(s.getYear(),s.getMonthValue()-1,s.getDayOfMonth());
@@ -274,8 +276,16 @@ public class Writer implements Initializable{
            startingDate.setFirstDayOfWeek(Calendar.MONDAY);
            
            while(startingDate.compareTo(endingDate)!=1){
-               for (Iterator iterator = records.iterator(); iterator.hasNext();) {
+               for (ListIterator iterator = records.listIterator(); iterator.hasNext();) {
                     DailyAttendance next = (DailyAttendance) iterator.next();
+		    DailyAttendance tomorrow = null;
+		    if(iterator.hasNext()){
+			    tomorrow = (DailyAttendance) iterator.next();
+			    iterator.previous();
+		    }
+		       System.out.println(next.date);
+		       if(tomorrow!=null)
+		       System.out.println(tomorrow.date);
                     if(startingDate.getTimeInMillis()==next.date){
                         table.addCell(new PdfPCell(new Paragraph(next.getDate(),text)));
                         table.addCell(new PdfPCell(new Paragraph(next.getSchedule(),text)));
@@ -299,42 +309,148 @@ public class Writer implements Initializable{
                         if(next.isNightDiff){
                             NightDifferential n = new NightDifferential();
                             n.setDate(next.date);
-                            
                             if(next.overtime!=0){
                                 n.setOvertime(next.overtime);
                             }
-                            
                             n.setWorkinghours(next.timeOut-next.timeIn);
                             if(next.isRegularHoliday){
                                 n.setIsRegularHoliday(true);
-                                Date ndstart = new Date(next.getDate()+" 22:00");
+                                Date ndstart = new Date(next.getDate()+" 22:15");
                                 Date ndend = new Date(new Date(next.getDate()+" 06:00").getTime()+86400000);
-                                Date clockin = new Date(next.clockInDate);
+                                Date clockin = new Date(next.timeIn);
                                 if(next.timeIn!=0&&next.timeOut!=0){
-                                    if(clockin.getHours()==22){
+                                    if(clockin.getHours()>=22){
                                         n.setRh((next.date+86400000)-next.timeIn);
                                         if(next.timeOut<=ndend.getTime()){
-                                            n.setWorkinghours(next.timeOut-(next.date+86400000));
+                                            if(tomorrow!=null && (tomorrow.isRegularHoliday || tomorrow.isSpecialHoliday) ){
+                                                if(tomorrow.isRegularHoliday){
+                                                    n.setRh(n.getRh()+(next.timeOut-(next.date+86400000)));
+						    n.setWorkinghours(0);
+                                                }
+                                                else if(tomorrow.isSpecialHoliday){
+                                                    n.setSh(next.timeOut-(next.date+86400000));
+						    n.setWorkinghours(0);
+                                                }
+                                                else n.setWorkinghours(next.timeOut-(next.date+86400000));
+                                            }
+                                            else n.setWorkinghours(next.timeOut-(next.date+86400000));
                                         }
-                                        else n.setWorkinghours(21600000);
+					else{
+                                            if(tomorrow!=null && (tomorrow.isRegularHoliday || tomorrow.isSpecialHoliday) ){
+                                                if(tomorrow.isRegularHoliday){
+                                                    n.setRh(21600000);
+						    n.setWorkinghours(0);
+                                                }
+                                                else if(tomorrow.isSpecialHoliday){
+                                                    n.setSh(21600000);
+						    n.setWorkinghours(0);
+                                                }
+                                                else n.setWorkinghours(21600000);
+                                            }
+                                            else n.setWorkinghours(21600000);
+					}
                                     }
-                                    else n.setRh(10800000);
+                                    if(clockin.getHours()<22){
+                                        n.setRh(7200000);
+                                        if(next.timeOut<=ndend.getTime()){
+                                            if(tomorrow!=null&& (tomorrow.isRegularHoliday || tomorrow.isSpecialHoliday)){
+                                                if(tomorrow.isRegularHoliday){
+                                                    n.setRh(n.getRh()+(next.timeOut-(next.date+86400000)));
+						    n.setWorkinghours(0);
+                                                }
+                                                else if(tomorrow.isSpecialHoliday){
+                                                    n.setSh(next.timeOut-(next.date+86400000));
+						    n.setWorkinghours(0);
+                                                }
+                                                else n.setWorkinghours(next.timeOut-(next.date+86400000));
+                                            }
+                                            else n.setWorkinghours(next.timeOut-(next.date+86400000));
+                                        }
+					else{
+                                            if(tomorrow!=null && (tomorrow.isRegularHoliday || tomorrow.isSpecialHoliday) ){
+                                                if(tomorrow.isRegularHoliday){
+                                                    n.setRh(21600000);
+						    n.setWorkinghours(0);
+                                                }
+                                                else if(tomorrow.isSpecialHoliday){
+                                                    n.setSh(21600000);
+						    n.setWorkinghours(0);
+                                                }
+                                                else n.setWorkinghours(21600000);
+                                            }
+                                            else n.setWorkinghours(21600000);
+					}
+                                    }
                                 }
                             }
                             else if(next.isSpecialHoliday){
                                 n.setIsSpecialHoliday(true);
-                                Date ndstart = new Date(next.getDate()+" 22:00");
+                                Date ndstart = new Date(next.getDate()+" 22:15");
                                 Date ndend = new Date(new Date(next.getDate()+" 06:00").getTime()+86400000);
-                                Date clockin = new Date(next.clockInDate);
+                                Date clockin = new Date(next.timeIn);
                                 if(next.timeIn!=0&&next.timeOut!=0){
-                                    if(clockin.getHours()==22){
+                                    if(clockin.getHours()>=22){
                                         n.setSh((next.date+86400000)-next.timeIn);
                                         if(next.timeOut<=ndend.getTime()){
-                                            n.setWorkinghours(next.timeOut-(next.date+86400000));
+                                            if(tomorrow!=null&& (tomorrow.isRegularHoliday || tomorrow.isSpecialHoliday)){
+                                                if(tomorrow.isSpecialHoliday){
+                                                    n.setSh(n.getSh()+(next.timeOut-(next.date+86400000)));
+						    n.setWorkinghours(0);
+                                                }
+                                                else if(tomorrow.isRegularHoliday){
+                                                    n.setRh(next.timeOut-(next.date+86400000));
+						    n.setWorkinghours(0);
+                                                }
+                                                else n.setWorkinghours(next.timeOut-(next.date+86400000));
+                                            }
+                                            else n.setWorkinghours(next.timeOut-(next.date+86400000));
                                         }
-                                        else n.setWorkinghours(21600000);
+					else{
+                                            if(tomorrow!=null && (tomorrow.isRegularHoliday || tomorrow.isSpecialHoliday) ){
+                                                if(tomorrow.isRegularHoliday){
+                                                    n.setRh(21600000);
+						    n.setWorkinghours(0);
+                                                }
+                                                else if(tomorrow.isSpecialHoliday){
+                                                    n.setSh(21600000);
+						    n.setWorkinghours(0);
+                                                }
+                                                else n.setWorkinghours(21600000);
+                                            }
+                                            else n.setWorkinghours(21600000);
+					}
                                     }
-                                    else n.setSh(10800000);
+                                    if(clockin.getHours()<22){
+                                        n.setSh(7200000);
+                                        if(next.timeOut<=ndend.getTime()){
+                                            if(tomorrow!=null&& (tomorrow.isRegularHoliday || tomorrow.isSpecialHoliday)){
+                                                if(tomorrow.isSpecialHoliday){
+                                                    n.setSh(n.getSh()+(next.timeOut-(next.date+86400000)));
+						    n.setWorkinghours(0);
+                                                }
+                                                else if(tomorrow.isRegularHoliday){
+                                                    n.setRh(next.timeOut-(next.date+86400000));
+						    n.setWorkinghours(0);
+                                                }
+                                                else n.setWorkinghours(next.timeOut-(next.date+86400000));
+                                            }
+                                            else n.setWorkinghours(next.timeOut-(next.date+86400000));
+                                        }
+					else{
+                                            if(tomorrow!=null && (tomorrow.isRegularHoliday || tomorrow.isSpecialHoliday) ){
+                                                if(tomorrow.isRegularHoliday){
+                                                    n.setRh(21600000);
+						    n.setWorkinghours(0);
+                                                }
+                                                else if(tomorrow.isSpecialHoliday){
+                                                    n.setSh(21600000);
+						    n.setWorkinghours(0);
+                                                }
+                                                else n.setWorkinghours(21600000);
+                                            }
+                                            else n.setWorkinghours(21600000);
+					}
+                                    }
                                 }
                             }
                             nd.add(n);
@@ -353,7 +469,8 @@ public class Writer implements Initializable{
                                     }
                                     else if(next.brk!=0&&next.resume!=0){
                                         long total = (next.brk-next.timeIn) + (next.timeOut-next.resume);
-                                        h.setRh(total);
+					if(total>28800000) h.setRh(28800000);
+					else h.setRh(total);
                                     }
                                     else{
                                         if((next.timeOut-next.timeIn)>28800000)
@@ -375,7 +492,8 @@ public class Writer implements Initializable{
                                     }
                                     else if(next.brk!=0&&next.resume!=0){
                                         long total = (next.brk-next.timeIn) + (next.timeOut-next.resume);
-                                        h.setSh(total);
+					if(total>28800000) h.setSh(28800000);
+					else h.setSh(total);
                                     }
                                     else{
                                         if((next.timeOut-next.timeIn)>28800000)

@@ -631,7 +631,7 @@ public class AttendanceViewController  implements Initializable {
         BridgeUnit.getInstance().getRunningSession().update(employee);
         BridgeUnit.getInstance().getRunningSession().getTransaction().commit();
         
-        getAttendanceRecord();
+//        getAttendanceRecord();
     }
 
     synchronized public void insertNightDiff(DailyAttendance day, long attendanceRecord) {
