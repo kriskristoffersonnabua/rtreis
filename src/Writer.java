@@ -219,10 +219,6 @@ public class Writer implements Initializable{
     synchronized public void getTimecard(int id) {
         try {
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm");
-            String created = "Timecard ("+dateFormat.format(new Date())+")";
-            document.setHeader(new HeaderFooter(new Phrase(created), false));
-
             long totalLates=0; 
             long totalUndertime=0;
             long totalOvertime=0;
@@ -249,8 +245,7 @@ public class Writer implements Initializable{
 
             employeeName.setAlignment(Element.ALIGN_CENTER);
             employeeName.setSpacingAfter(2);
-            employeeName2.setSpacingBefore(120);
-            employeeName2.setAlignment(Element.ALIGN_CENTER);
+            employeeName2.setAlignment(Element.ALIGN_BOTTOM);
             departmentName.setAlignment(Element.ALIGN_CENTER);
             departmentName.setSpacingAfter(5);
             departmentName.setFont(text);
@@ -762,6 +757,10 @@ public class Writer implements Initializable{
                 holidaylists.addCell(new PdfPCell(new Paragraph(rh,text)));
             }
 
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm");
+            String created = "Timecard ("+dateFormat.format(new Date())+")";
+            document.setHeader(new HeaderFooter(new Phrase(created), false));
+
             document.add(employeeName);
             document.add(departmentName);
             document.add(table);
@@ -774,7 +773,6 @@ public class Writer implements Initializable{
             document.add(p1);
             document.add(holidaylists);
             document.add(employeeName2);
-            document.setFooter(new HeaderFooter(new Phrase(new Chunk("Human Resource Office")), false));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -823,7 +821,7 @@ public class Writer implements Initializable{
                                     if(next.getCheckbox().isSelected()){
                                         getTimecard(next.getId());
                                         if(iterator.hasNext())
-                                            document.newPage();
+                                        document.newPage();
                                     }
                                 }
                                 document.close();

@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="RTR_Employee_Information_System.jar" size="1623356" download="eager" />
+    <jar href="RTR_Employee_Information_System.jar" size="1645720" download="eager" />
     <jar href="lib/antlr-2.7.7.jar" size="437548" download="eager" />
     <jar href="lib/c3p0-0.9.2.1.jar" size="422423" download="eager" />
     <jar href="lib/com.lowagie.text-2.1.7.jar" size="1782376" download="eager" />
