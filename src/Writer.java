@@ -218,7 +218,6 @@ public class Writer implements Initializable{
 
     synchronized public void getTimecard(int id) {
         try {
-
             long totalLates=0; 
             long totalUndertime=0;
             long totalOvertime=0;
@@ -282,7 +281,6 @@ public class Writer implements Initializable{
                         tomorrow = (DailyAttendance) iterator.next();
                         iterator.previous();
                     }
-                    if(tomorrow!=null)
                         if(startingDate.getTimeInMillis()==next.date){
                             table.addCell(new PdfPCell(new Paragraph(next.getDate(),text)));
                             table.addCell(new PdfPCell(new Paragraph(next.getSchedule(),text)));
@@ -692,7 +690,6 @@ public class Writer implements Initializable{
 
             PdfPTable holidaylists = new PdfPTable(4);
             holidaylists.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            holidaylists.setSpacingBefore(0);
             holidaylists.setWidthPercentage(40);
 
             float[] columnW = {2f, 2f, 2.5f, 2.5f};
@@ -701,7 +698,7 @@ public class Writer implements Initializable{
             Paragraph p1 = new Paragraph("HOLIDAYS           ",Headers);
             p1.setLeading(-20);
             p1.setAlignment(Element.ALIGN_RIGHT);
-            p1.setSpacingAfter(8);
+            p1.setSpacingAfter(2);
 
             Paragraph p2 = new Paragraph("        NIGHT DIFFERENTIALS",Headers);
             p2.setSpacingAfter(8);
@@ -773,6 +770,7 @@ public class Writer implements Initializable{
             document.add(p1);
             document.add(holidaylists);
             document.add(employeeName2);
+            document.setFooter(new HeaderFooter(new Phrase(new Chunk("Human Resource Office")), false));
 
         } catch (Exception e) {
             e.printStackTrace();
