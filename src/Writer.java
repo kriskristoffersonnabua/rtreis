@@ -230,8 +230,7 @@ public class Writer implements Initializable{
             if(BridgeUnit.getInstance().getRunningSession().isOpen()) BridgeUnit.getInstance().closeSession();
             employee = BridgeUnit.getInstance().getEmployee(id);
 
-            Paragraph employeeName = new Paragraph(employee.getFirst_name()+" "+employee.getLast_name(),Headers);
-            Paragraph employeeName2 = new Paragraph(employee.getFirst_name()+" "+employee.getLast_name(),Headers);
+            Paragraph employeeName = new Paragraph(employee.getLast_name()+", "+employee.getFirst_name(),Headers);
             Paragraph departmentName = new Paragraph("Department",text);
 
             Collection<EmploymentStatus> er =  employee.getEmployment_records();
@@ -245,7 +244,6 @@ public class Writer implements Initializable{
 
             employeeName.setAlignment(Element.ALIGN_CENTER);
             employeeName.setSpacingAfter(2);
-            employeeName2.setAlignment(Element.ALIGN_BOTTOM);
             departmentName.setAlignment(Element.ALIGN_CENTER);
             departmentName.setSpacingAfter(5);
             departmentName.setFont(text);
@@ -464,25 +462,25 @@ public class Writer implements Initializable{
                                         if(next.timeOut<=ndend.getTime()){
                                             if(tomorrow!=null&& (tomorrow.isRegularHoliday || tomorrow.isSpecialHoliday)){
                                                 if(tomorrow.isSpecialHoliday){
-                                                    n.setSh(((next.date+86400000)-next.timeOut));
-                                                    n.setWorkinghours(ndstart.getTime()-(next.date+86400000));
+                                                    n.setSh((next.timeOut)-(next.date+86400000));
+                                                    n.setWorkinghours((next.date+86400000)-ndstart.getTime());
                                                 }
                                                 else if(tomorrow.isRegularHoliday){
-                                                    n.setRh(((next.date+86400000)-next.timeOut));
-                                                    n.setWorkinghours(ndstart.getTime()-(next.date+86400000));
+                                                    n.setRh((next.timeOut)-(next.date+86400000));
+                                                    n.setWorkinghours((next.date+86400000)-ndstart.getTime());
                                                 }
                                             }
-                                            else n.setWorkinghours(clockin.getTime()-next.timeOut);
+                                            else n.setWorkinghours(next.timeOut-clockin.getTime());
                                         }
                                         else{
                                             if(tomorrow!=null && (tomorrow.isRegularHoliday || tomorrow.isSpecialHoliday) ){
                                                 if(tomorrow.isRegularHoliday){
                                                     n.setRh(21600000);
-                                                    n.setWorkinghours(ndstart.getTime()-(next.date+86400000));
+                                                    n.setWorkinghours((next.date+86400000)-ndstart.getTime());
                                                 }
                                                 else if(tomorrow.isSpecialHoliday){
                                                     n.setSh(21600000);
-                                                    n.setWorkinghours(ndstart.getTime()-(next.date+86400000));
+                                                    n.setWorkinghours((next.date+86400000)-ndstart.getTime());
                                                 }
                                             }
                                             else{
@@ -772,7 +770,7 @@ public class Writer implements Initializable{
             document.add(nightdiffs);
             document.add(p1);
             document.add(holidaylists);
-            document.add(employeeName2);
+            document.setFooter(new HeaderFooter(new Phrase(new Chunk("Human Resource Office")), false));
 
         } catch (Exception e) {
             e.printStackTrace();
